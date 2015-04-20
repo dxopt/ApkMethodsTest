@@ -1,0 +1,21 @@
+#!/bin/sh
+
+# Get current path
+REAL_PATH=`readlink -e "$0"`
+if [ $? -ne 0 ]; then
+    REAL_PATH="$0"
+fi
+
+CUR_DIR=`dirname "$REAL_PATH"`
+mkdir -p $CUR_DIR/out
+
+JAVA_CLASS_NAME=me.ycdev.android.demo.apkmethods.creator.TestClassCreatorExecutor
+JAVA_SRC=`find $CUR_DIR/src/main/java/me/ycdev/android/demo/apkmethods/creator/ -name *.java`
+
+# clean the workspace
+rm -f $CUR_DIR/$JAVA_CLASS_NAME.class
+
+javac $JAVA_SRC -d $CUR_DIR/out && java -classpath $CUR_DIR/out $JAVA_CLASS_NAME $CUR_DIR
+
+# clean after work done
+#rm -f $CUR_DIR/$TestClassCreator.class
